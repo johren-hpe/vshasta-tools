@@ -6,7 +6,8 @@ set -e
 ssh-keygen -R ncn-m001 -f /root/.ssh/known_hosts
 
 csm_path=$(find /var/www/ephemeral -type d -name "csm-*" | head -1)
-ncns="ncn-m001 ncn-m002 ncn-m003"
+ncns=$(kubectl get nodes --no-headers | awk '{print $1}' | grep ncn-m)
+
 for package_name in docs-csm; do
     package_file=$(find ${csm_path}/rpm/cray/csm  -name "${package_name}-*.rpm")
     echo "Installing $(basename ${package_file}) on pit ..."

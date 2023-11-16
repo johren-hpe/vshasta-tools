@@ -6,7 +6,8 @@ set -e
 ssh-keygen -R ncn-m001 -f /root/.ssh/known_hosts
 
 csm_path=$(find /var/www/ephemeral -type d -name "csm-*" | head -1)
-ncns="ncn-m001 ncn-m002 ncn-m003 ncn-w001 ncn-w002 ncn-w003 ncn-s001 ncn-s002 ncn-s003" 
+ncns=$(kubectl get nodes --no-headers | awk '{print $1}')
+
 for package_name in csm-testing goss-servers hpe-csm-goss-package cray-cmstools-crayctldeploy; do
     package_file=$(find ${csm_path}/rpm/cray/csm  -name "${package_name}-*.rpm")
     echo "Installing $(basename ${package_file}) on pit ..."
